@@ -6,20 +6,23 @@ public class CameraController : MonoBehaviour
 
     public GameObject player;
 
-    public float distance;
-    
-    Vector3 offset = new Vector3(0, 0.3f, 0);
 
-    void Start()
-    {
-        if (Display.displays.Length > 1)
-            Display.displays[2].Activate();
-    }
+    float distanceDamp = 5f;
+    float rotationDamp = 5f;
+    
+    Vector3 camOffset = new Vector3(0, 2, -4);
+    Vector3 focOffset = new Vector3(0, 0.5f, 0);
+
+
 
     void LateUpdate()
     {
-        transform.position = player.transform.position - (player.transform.forward * distance) + offset;
-        transform.LookAt(player.transform);
-        transform.position += offset;
+        Vector3 toPos = player.transform.position + (player.transform.rotation * camOffset);
+        Vector3 curPos = Vector3.Lerp(transform.position, toPos, distanceDamp * Time.deltaTime);
+        transform.position = curPos;
+
+        Quaternion toRot = Quaternion.LookRotation(player.transform.position - transform.position, player.transform.up);
+        Quaternion curRot = Quaternion.Slerp(transform.rotation, toRot, rotationDamp * Time.deltaTime);
+        transform.rotation = curRot;
     }
 }
