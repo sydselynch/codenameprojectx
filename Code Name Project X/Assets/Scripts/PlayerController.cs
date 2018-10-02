@@ -5,7 +5,7 @@ public class PlayerController : MonoBehaviour
 {
 
     private float speed = 10;
-	public float strafeSpeed = 0.3f;
+	public float strafeSpeed = 0.5f;
     public float sensitivity = 500;
     private float totalTime;
 
@@ -29,15 +29,16 @@ public class PlayerController : MonoBehaviour
 
 	void StrafeUpdate()
 	{
+		
 		if (Input.GetKey (KeyCode.A)) {
-			Vector3 position = rb.transform.position;
-			position.x -= strafeSpeed;
-			rb.transform.position = position;
+			Vector3 dir = Vector3.zero;
+			dir += -Camera.main.transform.right;
+			rb.transform.position += dir.normalized*strafeSpeed;
 		}
 		if (Input.GetKey (KeyCode.D)) {
-			Vector3 position = rb.transform.position;
-			position.x += strafeSpeed;
-			rb.transform.position = position;
+			Vector3 dir = Vector3.zero;
+			dir += Camera.main.transform.right;
+			rb.transform.position += dir.normalized*strafeSpeed;
 		}
     }
 
