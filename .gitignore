@@ -1,0 +1,7 @@
+Library/
+Packages/
+ProjectSettings/
+Temp/
+.collabignore
+Assembly-CSharp.csproj
+"Code Name Project X.sln"
