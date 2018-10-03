@@ -4,7 +4,9 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
 
-    private float speed = 10;
+    private float speed = 0;
+	private float maxSpeed = 1;
+	private float minSpeed = -0.5f;
 	public float strafeSpeed = 0.5f;
     public float sensitivity = 500;
     private float totalTime;
@@ -25,11 +27,11 @@ public class PlayerController : MonoBehaviour
     {
 		StrafeUpdate();
         cursorUpdate();
+		AccelerateUpdate ();
     }
 
 	void StrafeUpdate()
 	{
-		
 		if (Input.GetKey (KeyCode.A)) {
 			Vector3 dir = Vector3.zero;
 			dir += -Camera.main.transform.right;
@@ -41,6 +43,28 @@ public class PlayerController : MonoBehaviour
 			rb.transform.position += dir.normalized*strafeSpeed;
 		}
     }
+
+	void AccelerateUpdate()
+	{
+		if (speed > 0) {
+			Vector3 dir = Vector3.zero;
+			dir += Camera.main.transform.forward;
+			rb.transform.position += dir.normalized*speed;
+		}
+		if (speed < 0) {
+			Vector3 dir = Vector3.zero;
+			dir += -Camera.main.transform.forward;
+			rb.transform.position += dir.normalized*(-speed);
+		}
+		if (Input.GetAxis ("Mouse ScrollWheel") > 0  && speed <= maxSpeed) {
+			speed+=0.2f;
+		}
+		if (Input.GetAxis ("Mouse ScrollWheel") < 0 && speed >= minSpeed) {
+			speed-=0.25f;
+		}
+		
+	}
+
 
     void cursorUpdate()
     {
