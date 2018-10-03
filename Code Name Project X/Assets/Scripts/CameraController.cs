@@ -4,22 +4,28 @@ using System.Collections;
 public class CameraController : MonoBehaviour
 {
 
-    public GameObject player;
+    public GameObject focalPoint;
+    //public GameObject focalPoint;
 
-    public float distance;
+
+    float distanceDamp = 5f;
+    float rotationDamp = 5f;
     
-    Vector3 offset = new Vector3(0, 0.3f, 0);
+    static Vector3 camOffset = new Vector3(0, 1, -4);
+    Vector3 shoulder = new Vector3(0, -camOffset.y, 0);
 
-    void Start()
-    {
-        if (Display.displays.Length > 1)
-            Display.displays[2].Activate();
-    }
+
 
     void LateUpdate()
     {
-        transform.position = player.transform.position - (player.transform.forward * distance) + offset;
-        transform.LookAt(player.transform);
-        transform.position += offset;
+        Transform target = focalPoint.transform;
+        //target.position += target.up;
+        Vector3 toPos = (target.position) + (target.rotation * camOffset);
+        Vector3 curPos = Vector3.Lerp(transform.position, toPos, distanceDamp * Time.deltaTime);
+        transform.position = curPos;
+
+        Quaternion toRot = Quaternion.LookRotation(target.position - transform.position, target.up);
+        Quaternion curRot = Quaternion.Slerp(transform.rotation, toRot, rotationDamp * Time.deltaTime);
+        transform.rotation = curRot;
     }
 }
