@@ -11,11 +11,19 @@ public class PlayerController : MonoBehaviour
     public float sensitivity = 500;
     private float totalTime;
 
+    //Shooting variables
+    private int gunType = 1;
+    public ParticleSystem muzzleFlash;
+    private float nextTimeToFire = 0f;
+    private float fireRate = 15f;
+
     private Rigidbody rb;
+    private Transform transform;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        transform = GetComponent<Transform>();
     }
 
     private void Update()
@@ -28,6 +36,33 @@ public class PlayerController : MonoBehaviour
 		StrafeUpdate();
         cursorUpdate();
 		AccelerateUpdate ();
+        ShootUpdate();
+    }
+
+    void ShootUpdate()
+    {
+        if (Input.GetButton("Fire1") && Time.time >= nextTimeToFire)
+        {
+            nextTimeToFire = Time.time + 1f / fireRate;
+            Shoot();
+        }
+    }
+
+    void Shoot()
+    {
+        float gun1Range = 100f;
+        switch (gunType)
+        {
+            case 1:
+                muzzleFlash.Play();
+                RaycastHit hit;
+                if(Physics.Raycast(transform.position, transform.forward, out hit, gun1Range))
+                {
+                    Debug.Log(hit.transform.name);
+                }
+                
+                break;
+        }
     }
 
 	void StrafeUpdate()
