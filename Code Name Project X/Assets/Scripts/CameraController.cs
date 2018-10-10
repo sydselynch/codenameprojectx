@@ -8,15 +8,13 @@ public class CameraController : MonoBehaviour
     //public GameObject focalPoint;
 
 
-    float distanceDamp = 5f;
-    float rotationDamp = 5f;
+    float distanceDamp = 200f;
+    float rotationDamp = 20f;
     
     static Vector3 camOffset = new Vector3(0, 1, -4);
     Vector3 shoulder = new Vector3(0, -camOffset.y, 0);
 
-
-
-    void LateUpdate()
+    private void FixedUpdate()
     {
         Transform target = focalPoint.transform;
         //target.position += target.up;
@@ -28,4 +26,6 @@ public class CameraController : MonoBehaviour
         Quaternion curRot = Quaternion.Slerp(transform.rotation, toRot, rotationDamp * Time.deltaTime);
         transform.rotation = curRot;
     }
+
+
 }
